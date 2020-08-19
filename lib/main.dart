@@ -104,6 +104,17 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            FlatButton(
+             child: Text("open new Route"),
+              textColor: Colors.blue,
+              onPressed: (){
+               //导航到新路由
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return NewRoute();
+                }));
+              },
+
+            )
           ],
         ),
       ),
@@ -115,3 +126,20 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+class NewRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("NewRoute"),
+      ),
+      body: Center(
+        child: Text("this is a new route"),
+      ),
+
+    );
+  }
+
+}
+
