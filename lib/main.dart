@@ -27,6 +27,19 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: "home",
+      routes:{
+        "new_page":(context) => NewRoute(),
+        "home":(context)=> MyHomePage(title:'Flutter Demo Home Page'),//注册首页路由
+        "echo_page":(context) =>EchoRoute(),
+      },
+//      onGenerateRoute: (RouteSettings settings){
+//        return MaterialPageRoute(builder: (context){
+//             String routeName = settings.name;
+//          // 如果访问的路由页需要登录，但当前未登录，则直接返回登录页路由，
+//          // 引导用户登录；其它情况则正常打开路由。
+//        });
+//      },
     );
   }
 }
@@ -105,15 +118,31 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headline4,
             ),
             FlatButton(
-             child: Text("open new Route"),
+              child: Text("open new Route"),
               textColor: Colors.blue,
+              onPressed: () {
+                //导航到新路由
+//                Navigator.push(context, MaterialPageRoute(builder: (context) {
+//                  return NewRoute();
+//                }));
+              Navigator.pushNamed(context, "new_page");
+              },
+            ),
+            FlatButton(
+              child: Text("路由传值测试"),
+              textColor: Colors.red,
               onPressed: (){
-               //导航到新路由
                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                    return NewRoute();
+                  return RouterTestRoute();
                 }));
               },
-
+            ),
+            FlatButton(
+              child: Text("命名路由器参数传递"),
+              textColor: Colors.amber,
+              onPressed: (){
+                Navigator.pushNamed(context, "echo_page",arguments: 'hi');
+              },
             )
           ],
         ),
@@ -127,6 +156,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+/**
+ * 跳转新路由
+ */
 class NewRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -137,9 +169,100 @@ class NewRoute extends StatelessWidget {
       body: Center(
         child: Text("this is a new route"),
       ),
+    );
+  }
+}
+
+class TipRoute extends StatelessWidget {
+  TipRoute({
+    Key key,
+    @required this.text,
+  }) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("提示"),
+      ),
+      body:Padding(
+        padding: EdgeInsets.all(18),
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Text(text),
+              RaisedButton(
+                onPressed: ()=>Navigator.pop(context,"我是返回值"),
+                child: Text("返回"),
+              ),
+            ],
+          ),
+        ),
+
+      )
 
     );
+  }
+}
+
+class RouterTestRoute extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: RaisedButton(
+          onPressed: ()async{
+            //打开tipRoute并返回结果
+            var result = await Navigator.push(context, MaterialPageRoute(
+              builder: (context){
+                return TipRoute(
+                  //路由参数
+                  text: "我是提示",
+                );
+              }
+
+            ));
+            //输入tipRoute返回路由结果
+            print("路由返回值:$result");
+          },
+
+          child: Text("打开提示页"),
+
+
+        ),
+
+    );
+
   }
 
 }
 
+class EchoRoute extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+
+      //获取命名路由传递参数
+    var args = ModalRoute.of(context).settings.arguments;
+    print(args);
+
+    return Scaffold(
+      appBar: AppBar(
+        title:Text("命名路由器参数传递"),
+      ),
+      body:Center(
+        child: Column(
+          children: [
+            Text(args)
+          ],
+        ),
+      ),
+
+
+    );
+
+
+  }
+
+}
