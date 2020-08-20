@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:english_words/english_words.dart';
+import 'dart:async' show Future;
+import 'package:flutter/services.dart' show rootBundle;
 void main() {
   runApp(MyApp());
 }
@@ -143,7 +145,64 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: (){
                 Navigator.pushNamed(context, "echo_page",arguments: 'hi');
               },
-            )
+            ),
+            RandomWordsWidget(),
+            Text("helloworld",textAlign: TextAlign.left),
+            Text("Hello World"*9,maxLines:1, overflow: TextOverflow.ellipsis),
+            Text("Hello World",textScaleFactor: 1.5,),
+            Text("Hello World",style: TextStyle(
+              color: Colors.blue,
+              fontSize: 18.0,
+              height: 1.0,
+              fontFamily: "Courier",
+              background: new Paint()..color =Colors.amber,
+              decoration: TextDecoration.underline,
+              decorationStyle: TextDecorationStyle.dashed
+
+            ),),
+            Text.rich(TextSpan(
+              children: [
+                TextSpan(
+                  text: "Home："
+                ),
+                TextSpan(
+                  text: "https://flutterchina.club",
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                )
+              ]
+
+            )),
+            RaisedButton(
+              child: Text("raisedButton"),
+              onPressed: (){
+                print("点击了raisedButton");
+              },
+
+            ),
+            FlatButton(
+              child: Text("flatButton"),
+              onPressed: (){
+                print("点击了flatButton");
+              },
+            ),
+            OutlineButton(
+              child: Text("outlineButton"),
+              onPressed: (){
+                print("点击了outlineButton");
+              },
+            ),
+            IconButton(
+              icon:Icon(Icons.thumb_up),
+              onPressed: (){
+                print("点击了iconButton");
+              },
+            ),
+            RaisedButton.icon(onPressed:null, icon: Icon(Icons.send), label: Text("发送")),
+            FlatButton.icon(onPressed: null, icon: Icon(Icons.add), label: Text("添加")),
+            OutlineButton.icon(onPressed: null, icon: Icon(Icons.info), label: Text("详情"))
+
           ],
         ),
       ),
@@ -151,7 +210,9 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ), // Th
+
+      // is trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
@@ -162,12 +223,72 @@ class _MyHomePageState extends State<MyHomePage> {
 class NewRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String icons = "";
+    icons+="\uE914";
+    icons+="\uE000";
+    icons+="\uE90D";
+
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text("NewRoute"),
       ),
       body: Center(
-        child: Text("this is a new route"),
+        child:Column(
+          children: [
+            Text("this is a new route"),
+            RaisedButton(
+              color:Colors.blue,
+              highlightColor: Colors.blue[700],
+              colorBrightness: Brightness.dark,
+              splashColor: Colors.grey,
+              child: Text("submit"),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+              onPressed: (){
+                print("newRoute");
+              },
+            ),
+            Image(
+              image:AssetImage("images/icon_tudali.png"),
+              width: 100.0,
+              color: Colors.blue,
+              colorBlendMode: BlendMode.difference,
+            ),
+
+            Image.asset("images/icon_tudali.png",width: 100.0,),
+            Image(
+              image: NetworkImage("http://www.tudali.com/Img/%E9%A6%96%E9%A1%B5/%E9%A6%96%E9%A1%B5_27.png"),
+              width: 100.0,
+            ),
+            Image.network("http://www.tudali.com/Img/%E9%A6%96%E9%A1%B5/%E9%A6%96%E9%A1%B5_27.png",width: 200.0,height: 400,repeat: ImageRepeat.repeatY,),
+
+            Text(
+              icons,
+              style: TextStyle(
+                fontFamily: "MaterialIcons",
+                fontSize: 50.0,
+                color:Colors.amber,
+
+              ),
+            ),
+
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(MyIcons.book,color: Colors.purple,),
+                Icon(MyIcons.wechat,color: Colors.green,),
+              ],
+            )
+
+
+          ],
+
+
+
+        ),
+
       ),
     );
   }
@@ -198,6 +319,7 @@ class TipRoute extends StatelessWidget {
                 onPressed: ()=>Navigator.pop(context,"我是返回值"),
                 child: Text("返回"),
               ),
+
             ],
           ),
         ),
@@ -265,4 +387,35 @@ class EchoRoute extends StatelessWidget{
 
   }
 
+}
+
+
+class RandomWordsWidget extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+
+    final randomWord = new WordPair.random();
+     print(randomWord);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: new Text(randomWord.toString()),
+    );
+
+  }
+
+}
+
+class MyIcons{
+  // book 图标
+  static const IconData book = const IconData(
+      0xe6c0,
+      fontFamily: 'myIcon',
+      matchTextDirection: true
+  );
+  // 微信图标
+  static const IconData wechat = const IconData(
+      0xe636,
+      fontFamily: 'myIcon',
+      matchTextDirection: true
+  );
 }
