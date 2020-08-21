@@ -180,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("raisedButton"),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return FocusTestRoute();
+                  return SwatchAndCheckBox();
                 }));
                 print("点击了raisedButton");
               },
@@ -319,6 +319,8 @@ class _SwitchAndCheckBoxTestRouteState extends State<SwatchAndCheckBox> {
   bool switchSelected = true; //维护单选开关状态
   bool checkBoxSelected = true; //维护复选框状态
   TextEditingController _unameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  GlobalKey _formkey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -340,47 +342,90 @@ class _SwitchAndCheckBoxTestRouteState extends State<SwatchAndCheckBox> {
         appBar: AppBar(
           title: Text("switchAndCheckbox"),
         ),
+
         body: Center(
-          child: Column(
-            children: [
-              Switch(
-                value: switchSelected,
-                onChanged: (value) {
-                  //重构界面
-                  setState(() {
-                    switchSelected = value;
-                  });
-                },
-              ),
-              Checkbox(
-                  value: checkBoxSelected,
+
+          child:Form(
+            key:_formkey,
+            autovalidate: true,
+            child: Column(
+              children: [
+                Switch(
+                  value: switchSelected,
                   onChanged: (value) {
                     //重构界面
                     setState(() {
-                      checkBoxSelected = value;
+                      switchSelected = value;
                     });
-                  }),
-              TextField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  labelText: "用户名",
-                  hintText: "用户名或邮箱",
-                  prefixIcon: Icon(Icons.person),
+                  },
                 ),
-                onChanged: (v) {
+                Checkbox(
+                    value: checkBoxSelected,
+                    onChanged: (value) {
+                      //重构界面
+                      setState(() {
+                        checkBoxSelected = value;
+                      });
+                    }),
+                TextFormField(
+                  autofocus: true,
+
+                  decoration: InputDecoration(
+                    labelText: "用户名",
+                    hintText: "用户名或邮箱",
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                  onChanged: (v) {
 //              print("username:onchange$v---");
-                },
-                controller: _unameController,
-              ),
-              TextField(
-                decoration: InputDecoration(
-                    labelText: "密码",
-                    hintText: "您的密码",
-                    prefixIcon: Icon(Icons.lock)),
-                obscureText: true,
-              )
-            ],
+                  },
+                  controller: _unameController,
+                  validator: (v){
+                  return v.trim().length>0?null:"用户名不能为空";
+
+                  },
+                ),
+                TextFormField(
+                  controller: _passwordController,
+
+                  decoration: InputDecoration(
+                      labelText: "密码",
+                      hintText: "您的密码",
+                      prefixIcon: Icon(Icons.lock)),
+                  obscureText: true,
+                  validator: (v){
+                    return v.trim().length>5?null :"密码不能少于6位";
+                  },
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top:28.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: RaisedButton(
+                          padding: EdgeInsets.all(15.0),
+                          child: Text("登录"),
+                          color: Theme.of(context).primaryColor,
+                          textColor: Colors.white,
+                          onPressed: (){
+                            if((_formkey.currentState as FormState).validate()){
+                              print("验证通过");
+                            }
+                          },
+                        ),
+                      )
+
+                    ],
+
+                  ),
+
+
+                ),
+
+              ],
+            ),
           ),
+
         ));
   }
 }
