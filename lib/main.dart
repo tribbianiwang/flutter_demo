@@ -177,6 +177,9 @@ class _MyHomePageState extends State<MyHomePage> {
             RaisedButton(
               child: Text("raisedButton"),
               onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return SwatchAndCheckBox();
+                }));
                 print("点击了raisedButton");
               },
 
@@ -293,6 +296,73 @@ class NewRoute extends StatelessWidget {
     );
   }
 }
+
+class WidgetTestRoute extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+
+    return SwatchAndCheckBox();
+
+
+
+
+
+  }
+
+}
+
+class SwatchAndCheckBox extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return new _SwitchAndCheckBoxTestRouteState();
+  }
+
+}
+
+ class _SwitchAndCheckBoxTestRouteState extends State<SwatchAndCheckBox>{
+  bool switchSelected = true;//维护单选开关状态
+  bool checkBoxSelected = true;//维护复选框状态
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return
+      Scaffold(
+          appBar: AppBar(title: Text("switchAndCheckbox"),),
+          body: Center(child:Column(
+        children: [
+          Switch(
+            value: switchSelected,
+            onChanged: (value){
+              //重构界面
+              setState(() {
+                switchSelected = value;
+              });
+
+            },
+
+          ),
+          Checkbox(
+              value: checkBoxSelected,
+              onChanged: (value){
+                //重构界面
+                setState(() {
+                  checkBoxSelected = value;
+                });
+              }
+
+          ),
+
+        ],
+
+      ),));
+
+
+  }
+
+ }
+
 
 class TipRoute extends StatelessWidget {
   TipRoute({
