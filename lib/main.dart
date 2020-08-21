@@ -626,7 +626,43 @@ class TipRoute extends StatelessWidget {
 class RouterTestRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return
+    Scaffold(
+      appBar: AppBar(title:Text("test")),
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height:20,
+             child: LinearProgressIndicator(
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation(Colors.blue),
+                value: .8,
+              ),
+            ),
+
+            SizedBox(
+              width: 100,
+              height: 100,
+              child:   CircularProgressIndicator(
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation(Colors.redAccent),
+                value: .9,
+
+              ),
+
+            ),
+
+            ProgressRoute()
+
+
+          ],
+        ),
+      ),
+
+
+    );
+      Center(
       child: RaisedButton(
         onPressed: () async {
           //打开tipRoute并返回结果
@@ -645,6 +681,59 @@ class RouterTestRoute extends StatelessWidget {
     );
   }
 }
+
+class ProgressRoute extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState()=>_ProgressRouteState();
+
+}
+
+class _ProgressRouteState extends State    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(vsync: this,duration: Duration(seconds: 3));
+    _animationController.forward();
+    _animationController.addListener(() {
+      setState(() {
+
+      });
+    });
+
+    super.initState();
+
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: LinearProgressIndicator(
+              backgroundColor: Colors.grey[200],
+              valueColor: ColorTween(begin: Colors.grey,end: Colors.blue).animate(_animationController),
+              value: _animationController.value,
+            ),
+            
+          ),
+        ],
+      ),
+
+    );
+  }
+
+}
+
 
 class EchoRoute extends StatelessWidget {
   @override
